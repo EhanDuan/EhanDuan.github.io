@@ -132,7 +132,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -154,6 +154,97 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/30/Volatile-in-Java/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/shiba.jpeg">
+      <meta itemprop="name" content="Kevin Duan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/06/30/Volatile-in-Java/" class="post-title-link" itemprop="url">Volatile in Java</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-06-30 14:19:09 / Modified: 14:33:41" itemprop="dateCreated datePublished" datetime="2023-06-30T14:19:09-04:00">2023-06-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/domain-knowledge/" itemprop="url" rel="index"><span itemprop="name">domain knowledge</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Volatile-keyword-in-Java"><a href="#Volatile-keyword-in-Java" class="headerlink" title="Volatile keyword in Java"></a><code>Volatile</code> keyword in Java</h1><p><code>Volatile</code> is usually used in multi-threading environment. It makes sure <u>a variable value</u> directly write into <strong>main memory</strong>.</p>
+<p>In addition, it also prevents instructions reorder.</p>
+<p>Previously, I had a mistake idea that <code>Volatile</code> also belongs to synchronization like <code>synchronzied</code>. But <em>de facto</em>, it is not.</p>
+<p><code>Volatile</code> just guarantee <strong>visibility</strong>.</p>
+<p>The wrong idea is from following: I used following code to present <code>volatile</code> could get expected result even under race condition. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    List&lt;Thread&gt; tasks = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            count++;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;);</span><br><span class="line">        tasks.add(thread);</span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Thread thread : tasks) &#123;</span><br><span class="line">        thread.join();</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(count); <span class="comment">// 2000</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The expected result is 2000 and everytime I got 2000, which misleads me. But actually, there is error in above code.</p>
+<p><strong>All 1000 tasks are starting in a sequential order</strong>. There are time lag between each iteration. For example, thread - 0 (<code>i</code> &#x3D; 0) starts before thread - 1(<code>i</code> &#x3D; 1).</p>
+<p>Revised code: By adding random sleep time for each thread, threads starting early could execute second <code>count++</code> after those later threads.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    List&lt;Thread&gt; tasks = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            count++;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="keyword">new</span> <span class="title class_">Random</span>().nextInt(<span class="number">100</span>));</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            &#125;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;);</span><br><span class="line">        tasks.add(thread);</span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Thread thread : tasks) &#123;</span><br><span class="line">        thread.join();</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(count); <span class="comment">//1964</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The result here shows <code>volatile</code>  cannot guarantee expected result.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -193,7 +284,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-06-15 17:50:54 / Modified: 18:04:50" itemprop="dateCreated datePublished" datetime="2023-06-15T17:50:54-05:00">2023-06-15</time>
+      <time title="Created: 2023-06-15 18:50:54 / Modified: 19:04:50" itemprop="dateCreated datePublished" datetime="2023-06-15T18:50:54-04:00">2023-06-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -293,7 +384,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-06-15 17:37:13 / Modified: 17:49:35" itemprop="dateCreated datePublished" datetime="2023-06-15T17:37:13-05:00">2023-06-15</time>
+      <time title="Created: 2023-06-15 17:37:13 / Modified: 23:22:34" itemprop="dateCreated datePublished" datetime="2023-06-15T17:37:13-04:00">2023-06-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -301,7 +392,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/mannual/" itemprop="url" rel="index"><span itemprop="name">mannual</span></a>
+          <a href="/categories/manual/" itemprop="url" rel="index"><span itemprop="name">manual</span></a>
         </span>
     </span>
 
@@ -367,7 +458,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/14/My-First-Blog/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/15/Deploy%20Hexo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/shiba.jpeg">
@@ -385,7 +476,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/06/14/My-First-Blog/" class="post-title-link" itemprop="url">My First Blog</a>
+          <a href="/2023/06/15/Deploy%20Hexo/" class="post-title-link" itemprop="url">Deploy Hexo</a>
         </h2>
 
         <div class="post-meta-container">
@@ -395,83 +486,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-06-14 23:22:36" itemprop="dateCreated datePublished" datetime="2023-06-14T23:22:36-05:00">2023-06-14</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
       
-    </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/14/Deploy%20Hexo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/shiba.jpeg">
-      <meta itemprop="name" content="Kevin Duan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kevin's Personal Tech Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Kevin's Personal Tech Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/06/14/Deploy%20Hexo/" class="post-title-link" itemprop="url">Deploy Hexo</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-06-14 23:16:53" itemprop="dateCreated datePublished" datetime="2023-06-14T23:16:53-05:00">2023-06-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-06-15 12:56:55" itemprop="dateModified" datetime="2023-06-15T12:56:55-05:00">2023-06-15</time>
+      <time title="Created: 2023-06-15 00:16:53 / Modified: 23:22:45" itemprop="dateCreated datePublished" datetime="2023-06-15T00:16:53-04:00">2023-06-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -479,7 +496,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Mannual/" itemprop="url" rel="index"><span itemprop="name">Mannual</span></a>
+          <a href="/categories/manual/" itemprop="url" rel="index"><span itemprop="name">manual</span></a>
         </span>
     </span>
 
