@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
     <meta property="og:type" content="website">
 <meta property="og:title" content="Kevin&#39;s Personal Tech Blog">
@@ -37,6 +37,8 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Kevin's Personal Tech Blog</title>
   
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-5NQQ2TS37M","only_pageview":true}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
 
 
 
@@ -121,7 +123,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -132,7 +134,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -154,6 +156,159 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/04/SpringBoot-with-AWS-DynamoDB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/shiba.jpeg">
+      <meta itemprop="name" content="Kevin Duan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/07/04/SpringBoot-with-AWS-DynamoDB/" class="post-title-link" itemprop="url">SpringBoot with AWS DynamoDB</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-07-04 14:04:59 / Modified: 14:57:57" itemprop="dateCreated datePublished" datetime="2023-07-04T14:04:59-04:00">2023-07-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning-Note/" itemprop="url" rel="index"><span itemprop="name">Learning Note</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="AWS-DynamoDB"><a href="#AWS-DynamoDB" class="headerlink" title="AWS DynamoDB"></a>AWS DynamoDB</h1><p>Amazon DynamoDB is a fully managed, serverless, key-value NoSQL database designed to run high-performance applications at any scale.</p>
+<h1 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h1><p>SpringBoot + AWS DynamoDB</p>
+<h2 id="AWS-Preparation"><a href="#AWS-Preparation" class="headerlink" title="AWS Preparation"></a>AWS Preparation</h2><h3 id="IAM-and-Policy"><a href="#IAM-and-Policy" class="headerlink" title="IAM and Policy"></a>IAM and Policy</h3><ol>
+<li>create IAM Group with <code>AmazonDynamoDBFullAccess</code>.</li>
+<li>create a user within this group</li>
+<li>Get <code>accessKey</code> and <code>secretKey</code>  of this user.</li>
+</ol>
+<h3 id="DynamoDB"><a href="#DynamoDB" class="headerlink" title="DynamoDB"></a>DynamoDB</h3><p>create a table with default setting, using <code>id</code> as paritition key</p>
+<h2 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h2><ol>
+<li><p>add aws dependency</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.amazonaws<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aws-java-sdk-dynamodb<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.12.338<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>add <code>accessKey</code> and <code>secretKey</code> to properties file</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">aws.accessKey</span> = <span class="string">accessKey</span></span><br><span class="line"><span class="attr">aws.secretKey</span> = <span class="string">secretKey</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>create config class</p>
+<p>Modify the endpoint config with your aws endpoints.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DynamodbConfiguration</span> &#123;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;aws.accessKey&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String accessKey;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;aws.secretKey&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String secretKey;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> DynamoDBMapper <span class="title function_">dynamoDBMapper</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DynamoDBMapper</span>(amazonDynamoDB());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> AmazonDynamoDB <span class="title function_">amazonDynamoDB</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> AmazonDynamoDBClientBuilder.standard()</span><br><span class="line">                .withEndpointConfiguration(</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">AwsClientBuilder</span>.EndpointConfiguration(</span><br><span class="line">                                <span class="string">&quot;dynamodb.us-east-2.amazonaws.com&quot;</span>,</span><br><span class="line">                                <span class="string">&quot;us-east-2&quot;</span></span><br><span class="line"></span><br><span class="line">                        )</span><br><span class="line">                ).withCredentials(</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">AWSStaticCredentialsProvider</span>(</span><br><span class="line">                                <span class="keyword">new</span> <span class="title class_">BasicAWSCredentials</span>(accessKey, secretKey)</span><br><span class="line">                        )</span><br><span class="line">                ).build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Create <code>Entity</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.dynamodbdemo.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.amazonaws.services.dynamodbv2.datamodeling.*;</span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="meta">@DynamoDBTable(tableName = &quot;dynamodbdemo&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="meta">@DynamoDBHashKey</span></span><br><span class="line">    <span class="meta">@DynamoDBAutoGeneratedKey</span></span><br><span class="line">    <span class="keyword">private</span> String userId;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DynamoDBAttribute</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DynamoDBAttribute</span></span><br><span class="line">    <span class="keyword">private</span> String email;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DynamoDBAttribute</span></span><br><span class="line">    <span class="keyword">private</span> Address address;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>The reference type field should be marked with <code>@DynamoDBDocument</code>.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.dynamodbdemo.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;</span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="meta">@DynamoDBDocument</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Address</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String addressId;</span><br><span class="line">    <span class="keyword">private</span> String addressLine1;</span><br><span class="line">    <span class="keyword">private</span> String addressLine2;</span><br><span class="line">    <span class="keyword">private</span> String city;</span><br><span class="line">    <span class="keyword">private</span> String state;</span><br><span class="line">    <span class="keyword">private</span> String country;</span><br><span class="line">    <span class="keyword">private</span> String zipCode;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Note: when creating new employee, no necessary to provide id. DynamoDB will generate a UUID automatically.</p>
+</blockquote>
+</li>
+</ol>
+<h1 id="Debug-Collections"><a href="#Debug-Collections" class="headerlink" title="Debug Collections"></a>Debug Collections</h1><ol>
+<li><p>Unknown Host exception from the AWS Java client?</p>
+<p>Reason: typo in service endpoint (in config class)</p>
+<p>Solution: find correct endpoint via aws official doc. Here is a table of avaliable service endpoints: <a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/general/latest/gr/ddb.html">https://docs.aws.amazon.com/general/latest/gr/ddb.html</a></p>
+<table>
+<thead>
+<tr>
+<th align="left">Region Name</th>
+<th align="left">Region</th>
+<th align="left">Endpoint</th>
+<th align="left">Protocol</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">US East (Ohio)</td>
+<td align="left">us-east-2</td>
+<td align="left">dynamodb.us-east-2.amazonaws.comdynamodb-fips.us-east-2.amazonaws.com</td>
+<td align="left">HTTP and HTTPSHTTPS</td>
+</tr>
+<tr>
+<td align="left">US East (N. Virginia)</td>
+<td align="left">us-east-1</td>
+<td align="left">dynamodb.us-east-1.amazonaws.comdynamodb-fips.us-east-1.amazonaws.com</td>
+<td align="left">HTTP and HTTPSHTTPS</td>
+</tr>
+<tr>
+<td align="left">US West (N. California)</td>
+<td align="left">us-west-1</td>
+<td align="left">dynamodb.us-west-1.amazonaws.comdynamodb-fips.us-west-1.amazonaws.com</td>
+<td align="left">HTTP and HTTPSHTTPS</td>
+</tr>
+<tr>
+<td align="left">US West (Oregon)</td>
+<td align="left">us-west-2</td>
+<td align="left">dynamodb.us-west-2.amazonaws.comdynamodb-fips.us-west-2.amazonaws.com</td>
+<td align="left">HTTP and HTTPSHTTPS</td>
+</tr>
+</tbody></table>
+<p>Reference: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/9723169/unknown-host-exception-from-the-aws-java-client">https://stackoverflow.com/questions/9723169/unknown-host-exception-from-the-aws-java-client</a>, </p>
+</li>
+<li><p>type [class java.util.UUID] is not supported; no conversion from class java.lang.Long</p>
+<p>Reason: I used <code>long</code> type for employee <code>id</code>. It seems like aws dynamodb does not support <code>long</code> by default. </p>
+<p>Solution: I changed to String. There maybe a way to use long</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -191,9 +346,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2023-07-03 22:53:31 / Modified: 23:50:05" itemprop="dateCreated datePublished" datetime="2023-07-03T22:53:31-04:00">2023-07-03</time>
+      <time title="Created: 2023-07-03 22:53:31" itemprop="dateCreated datePublished" datetime="2023-07-03T22:53:31-04:00">2023-07-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-07-04 14:02:39" itemprop="dateModified" datetime="2023-07-04T14:02:39-04:00">2023-07-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -216,7 +377,8 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="Spring-Cloud-Sleuth"><a href="#Spring-Cloud-Sleuth" class="headerlink" title="Spring Cloud Sleuth"></a>Spring Cloud Sleuth</h1><h2 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h2><p>In microservice system, it is hard to understand a complete request workflow since we need to rely on <strong>scattered entry logs</strong>. For example,  below is an instance in e-commerce scene:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">    OrderService--&gt;PaymentService --&gt; NotificationService--&gt;DeliveryService ;</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">graph LR
+    OrderService--&gt;PaymentService --&gt; NotificationService--&gt;DeliveryService</code></pre>
 
 <blockquote>
 <p>Graph is generated using mermaid syntax. Here is a cheatsheet: <a target="_blank" rel="noopener" href="https://jojozhuang.github.io/tutorial/mermaid-cheat-sheet/">https://jojozhuang.github.io/tutorial/mermaid-cheat-sheet/</a></p>
@@ -229,7 +391,8 @@
 
 
 
-<h1 id="Demo-Project"><a href="#Demo-Project" class="headerlink" title="Demo Project"></a>Demo Project</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">    OrderService--&gt;PaymentService;</span><br></pre></td></tr></table></figure>
+<h1 id="Demo-Project"><a href="#Demo-Project" class="headerlink" title="Demo Project"></a>Demo Project</h1><pre><code class="highlight mermaid">graph LR
+    OrderService--&gt;PaymentService</code></pre>
 
 <p>Here,  2 microservices is built here. OrderService sends HTTP request via RestTemplate to PaymentService. </p>
 <h2 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h2><p> Spring Boot 2.7.X + MySQL + Sleuth + Zipkin (Docker) + Spring Data JPA</p>
@@ -810,7 +973,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Kevin Duan</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
 
 
@@ -818,12 +981,6 @@
   </footer>
 
   
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-  <div class="sidebar-dimmer"></div>
   <div class="back-to-top" role="button" aria-label="Back to top">
     <i class="fa fa-arrow-up fa-lg"></i>
     <span>0%</span>
@@ -836,7 +993,7 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   
 
