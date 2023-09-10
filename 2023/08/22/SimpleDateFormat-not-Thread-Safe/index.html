@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="ErrorIn a commonly used constants class, we have a date formatter 12345public class CommonConstants &amp;#123;  public static final String DATE_PATTERN &#x3D; &quot;MM&#x2F;dd&#x2F;yy&quot;  public static final DateForm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SimpleDateFormat not Thread-Safe">
+<meta property="og:url" content="http://example.com/2023/08/22/SimpleDateFormat-not-Thread-Safe/index.html">
+<meta property="og:site_name" content="Kevin&#39;s Personal Tech Blog">
+<meta property="og:description" content="ErrorIn a commonly used constants class, we have a date formatter 12345public class CommonConstants &amp;#123;  public static final String DATE_PATTERN &#x3D; &quot;MM&#x2F;dd&#x2F;yy&quot;  public static final DateForm">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-08-22T16:31:05.000Z">
+<meta property="article:modified_time" content="2023-08-22T17:19:53.734Z">
+<meta property="article:author" content="Kevin Duan">
+<meta property="article:tag" content="java SE">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2023/08/22/SimpleDateFormat-not-Thread-Safe/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2023/08/22/SimpleDateFormat-not-Thread-Safe/","path":"2023/08/22/SimpleDateFormat-not-Thread-Safe/","title":"SimpleDateFormat not Thread-Safe"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>SimpleDateFormat not Thread-Safe | Kevin's Personal Tech Blog</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-5NQQ2TS37M","only_pageview":true}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Kevin's Personal Tech Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Error"><span class="nav-number">1.</span> <span class="nav-text">Error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reason"><span class="nav-number">2.</span> <span class="nav-text">Reason</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution"><span class="nav-number">3.</span> <span class="nav-text">Solution</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Kevin Duan"
+      src="/images/shiba.jpeg">
+  <p class="site-author-name" itemprop="name">Kevin Duan</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/EhanDuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;EhanDuan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/22/SimpleDateFormat-not-Thread-Safe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/shiba.jpeg">
+      <meta itemprop="name" content="Kevin Duan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="SimpleDateFormat not Thread-Safe | Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SimpleDateFormat not Thread-Safe
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-08-22 11:31:05 / Modified: 12:19:53" itemprop="dateCreated datePublished" datetime="2023-08-22T11:31:05-05:00">2023-08-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Work-Tips/" itemprop="url" rel="index"><span itemprop="name">Work Tips</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h2><p>In a commonly used constants class, we have a date formatter</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CommonConstants</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">DATE_PATTERN</span> <span class="operator">=</span> <span class="string">&quot;MM/dd/yy&quot;</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">DateFormat</span> <span class="variable">DATE_FORMAT</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(DATE_PATTERN);</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>It is raised by rule <a target="_blank" rel="noopener" href="https://rules.sonarsource.com/java/RSPEC-2885/">S2885</a> Non-thread-safe fields should not be static.</p>
+<blockquote>
+<p>When an object is marked as <code>static</code>, it means that it belongs to the class rather than any class instance. This means there is only one copy of the static object in memory, regardless of how many class instances are created. Static objects are shared among all instances of the class and can be accessed using the class name rather than an instance of the class.</p>
+<p>A data type is considered thread-safe if it can be used correctly by multiple threads, regardless of how those threads are executed, without requiring additional coordination from the calling code. In other words, a thread-safe data type can be accessed and modified by multiple threads simultaneously without causing any issues or requiring extra work from the programmer to ensure correct behavior.</p>
+<p>Non-thread-safe objects are objects that are not designed to be used in a multi-threaded environment and can lead to race conditions and data inconsistencies when accessed by multiple threads simultaneously. Using them in a multi-threaded manner is highly likely to cause data problems or exceptions at runtime.</p>
+<p>When a non-thread-safe object is marked as static in a multi-threaded environment, it can cause issues because the non-thread-safe object will be shared across different instances of the containing class.</p>
+<p>This rule raises an issue when any of the following instances and their subtypes are marked as <code>static</code>:</p>
+<ul>
+<li><code>java.util.Calendar</code>,</li>
+<li><code>java.text.DateFormat</code>,</li>
+<li><code>javax.xml.xpath.XPath</code>, or</li>
+<li><code>javax.xml.validation.SchemaFactory</code>.</li>
+</ul>
+</blockquote>
+<h2 id="Reason"><a href="#Reason" class="headerlink" title="Reason"></a>Reason</h2><p>SimpleDateFormat is <strong>not</strong> designed in <strong>thread-safe</strong> manner. There would be error when multiple threads works on the same instance of the class.</p>
+<p>The main reason is <code>SimpleDateFormat</code> use a <code>Calendar</code> object internally to store the date information.</p>
+<p>Source code of constructor of <code>SimpleDateFormat</code>.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">SimpleDateFormat</span><span class="params">(String pattern, Locale locale)</span> &#123;</span><br><span class="line">	<span class="built_in">super</span>();</span><br><span class="line">	calendar = <span class="keyword">new</span> <span class="title class_">GregorianCalendar</span>(locale);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>Internally, <code>simpleDateFormat.format(Date date)</code> calls below method. Here, <code>calendar</code> is applied.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> StringBuffer <span class="title function_">format</span><span class="params">(Date date, StringBuffer toAppendTo,</span></span><br><span class="line"><span class="params">                            FieldDelegate delegate)</span> &#123;</span><br><span class="line">    <span class="comment">// Convert input date to time field list</span></span><br><span class="line">    calendar.setTime(date);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ....</span></span><br><span class="line">   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>In high concurrency, this set method will cause race condition.</p>
+<p>Reference:</p>
+<p><a target="_blank" rel="noopener" href="http://fahdshariff.blogspot.com/2010/08/dateformat-with-multiple-threads.html">DateFormat with Multiple Threads</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/csdn_ds/article/details/72984646">SimpleDateFormat线程不安全及解决办法</a></p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>Change to <code>DateTimeFormatter</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">DateTimeFormatter</span> <span class="variable">FORMATTER</span> <span class="operator">=</span> DateTimeFormatter.ofPattern(DATE_PATTERN)</span><br></pre></td></tr></table></figure>
+
+<p>Note: we need to parse Date to LocalDate in order to parse. Here is an example code.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.time.LocalDate;</span><br><span class="line"><span class="keyword">import</span> java.time.ZoneId;</span><br><span class="line"><span class="keyword">import</span> java.time.format.DateTimeFormatter;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DateToStringExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// Create a java.util.Date object (replace this with your desired date)</span></span><br><span class="line">        <span class="type">Date</span> <span class="variable">legacyDate</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Convert the java.util.Date to java.time.LocalDate</span></span><br><span class="line">        <span class="type">LocalDate</span> <span class="variable">localDate</span> <span class="operator">=</span> legacyDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Define your desired date format</span></span><br><span class="line">        <span class="type">DateTimeFormatter</span> <span class="variable">formatter</span> <span class="operator">=</span> DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy-MM-dd&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">formattedDate</span> <span class="operator">=</span> localDate.format(formatter);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;Formatted Date: &quot;</span> + formattedDate);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java-SE/" rel="tag"># java SE</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/22/Tips-of-Equals-Method/" rel="prev" title="Tips of Equals Method">
+                  <i class="fa fa-chevron-left"></i> Tips of Equals Method
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/10/SpringBoot-Shutdown/" rel="next" title="SpringBoot Shutdown">
+                  SpringBoot Shutdown <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kevin Duan</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js","integrity":"sha256-e0o3JYsdjqKajf9eOe22FhioYSz9WofRY4dLKo3F6do="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

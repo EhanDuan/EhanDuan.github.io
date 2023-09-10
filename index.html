@@ -123,18 +123,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -156,6 +156,358 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/10/SpringBoot-Shutdown/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/shiba.jpeg">
+      <meta itemprop="name" content="Kevin Duan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/09/10/SpringBoot-Shutdown/" class="post-title-link" itemprop="url">SpringBoot Shutdown</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-09-10 16:09:50 / Modified: 16:36:49" itemprop="dateCreated datePublished" datetime="2023-09-10T16:09:50-05:00">2023-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Work-Tips/" itemprop="url" rel="index"><span itemprop="name">Work Tips</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Work-Tips/Interview-Questions/" itemprop="url" rel="index"><span itemprop="name">Interview Questions</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Scenario"><a href="#Scenario" class="headerlink" title="Scenario"></a>Scenario</h1><p>During an interview, a candidate was asked to the way shutdown a running springboot application gracefully. </p>
+<p>We cannot use <code>System.exit()</code> in the application code. How do we do that?</p>
+<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><h2 id="What-is-graceful-shutdown"><a href="#What-is-graceful-shutdown" class="headerlink" title="What is graceful shutdown?"></a>What is graceful shutdown?</h2><p>When application shutdowns, the resouces are occupied should be released, such as </p>
+<ul>
+<li><p>threadpool (like <code>shutdown()</code> and <code>shutdownNow()</code>)</p>
+</li>
+<li><p>socket links (netty and mq server)</p>
+</li>
+<li><p>Inform service registry shutdown </p>
+</li>
+<li><p>Clean temp file like using <code>poi</code></p>
+<blockquote>
+<p>Apache POI is a Java API used for manipulating Microsoft Office format files, allowing you to read, create, and modify various file formats such as Excel, Word, and PowerPoint files. When dealing with large amounts of data, you may encounter memory overflow issues because the Java Virtual Machine stores the data in memory when reading or writing a significant amount of data, leading to insufficient memory situations.</p>
+</blockquote>
+</li>
+<li><p>In heap and out-of-heap memory release</p>
+</li>
+</ul>
+<h2 id="Mock-a-downtime-with-Kill-9"><a href="#Mock-a-downtime-with-Kill-9" class="headerlink" title="Mock a downtime with Kill -9"></a>Mock a downtime with <code>Kill -9</code></h2><ul>
+<li><p>find process id</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; jps -l</span><br><span class="line"></span><br><span class="line">9791 com.kevin.exceldemo.ExcelDemoApplication</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Kill it with 9</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -9 9791</span><br></pre></td></tr></table></figure>
+
+<p>There is console of springboot</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Process finished with exit code 137 (interrupted by signal 9: SIGKILL)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>KILL (9) − <strong>This signal is used to immediately terminate a process, without allowing it to clean up or save any data</strong>. This signal cannot be ignored by the process</p>
+</blockquote>
+<p>Besides, we could try -15 which is more graceful than -9.</p>
+<blockquote>
+<p> <strong>(signal 15) is a request to the program to terminate</strong>. If the program has a signal handler for SIGTERM that does not actually terminate the application, this kill may have no effect. This is the default signal sent by kill.</p>
+</blockquote>
+<h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><p>By integrating actuator, we can send post request for shutdown.</p>
+<ul>
+<li><p>Add maven dependency</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Expose endpoint in application.properties</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;*&#x27;</span></span><br><span class="line">    <span class="attr">jmx:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;*&#x27;</span></span><br><span class="line">  <span class="attr">endpoint:</span></span><br><span class="line">    <span class="attr">shutdown:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>send post request <code>curl -X POST localhost:port/actuator/shutdown</code></p>
+</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/2SFGRdYnTUHHJpexf7dv2Q">https://mp.weixin.qq.com/s/2SFGRdYnTUHHJpexf7dv2Q</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/22/SimpleDateFormat-not-Thread-Safe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/shiba.jpeg">
+      <meta itemprop="name" content="Kevin Duan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/22/SimpleDateFormat-not-Thread-Safe/" class="post-title-link" itemprop="url">SimpleDateFormat not Thread-Safe</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-08-22 11:31:05 / Modified: 12:19:53" itemprop="dateCreated datePublished" datetime="2023-08-22T11:31:05-05:00">2023-08-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Work-Tips/" itemprop="url" rel="index"><span itemprop="name">Work Tips</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h2><p>In a commonly used constants class, we have a date formatter</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CommonConstants</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">DATE_PATTERN</span> <span class="operator">=</span> <span class="string">&quot;MM/dd/yy&quot;</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">DateFormat</span> <span class="variable">DATE_FORMAT</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(DATE_PATTERN);</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>It is raised by rule <a target="_blank" rel="noopener" href="https://rules.sonarsource.com/java/RSPEC-2885/">S2885</a> Non-thread-safe fields should not be static.</p>
+<blockquote>
+<p>When an object is marked as <code>static</code>, it means that it belongs to the class rather than any class instance. This means there is only one copy of the static object in memory, regardless of how many class instances are created. Static objects are shared among all instances of the class and can be accessed using the class name rather than an instance of the class.</p>
+<p>A data type is considered thread-safe if it can be used correctly by multiple threads, regardless of how those threads are executed, without requiring additional coordination from the calling code. In other words, a thread-safe data type can be accessed and modified by multiple threads simultaneously without causing any issues or requiring extra work from the programmer to ensure correct behavior.</p>
+<p>Non-thread-safe objects are objects that are not designed to be used in a multi-threaded environment and can lead to race conditions and data inconsistencies when accessed by multiple threads simultaneously. Using them in a multi-threaded manner is highly likely to cause data problems or exceptions at runtime.</p>
+<p>When a non-thread-safe object is marked as static in a multi-threaded environment, it can cause issues because the non-thread-safe object will be shared across different instances of the containing class.</p>
+<p>This rule raises an issue when any of the following instances and their subtypes are marked as <code>static</code>:</p>
+<ul>
+<li><code>java.util.Calendar</code>,</li>
+<li><code>java.text.DateFormat</code>,</li>
+<li><code>javax.xml.xpath.XPath</code>, or</li>
+<li><code>javax.xml.validation.SchemaFactory</code>.</li>
+</ul>
+</blockquote>
+<h2 id="Reason"><a href="#Reason" class="headerlink" title="Reason"></a>Reason</h2><p>SimpleDateFormat is <strong>not</strong> designed in <strong>thread-safe</strong> manner. There would be error when multiple threads works on the same instance of the class.</p>
+<p>The main reason is <code>SimpleDateFormat</code> use a <code>Calendar</code> object internally to store the date information.</p>
+<p>Source code of constructor of <code>SimpleDateFormat</code>.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">SimpleDateFormat</span><span class="params">(String pattern, Locale locale)</span> &#123;</span><br><span class="line">	<span class="built_in">super</span>();</span><br><span class="line">	calendar = <span class="keyword">new</span> <span class="title class_">GregorianCalendar</span>(locale);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>Internally, <code>simpleDateFormat.format(Date date)</code> calls below method. Here, <code>calendar</code> is applied.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> StringBuffer <span class="title function_">format</span><span class="params">(Date date, StringBuffer toAppendTo,</span></span><br><span class="line"><span class="params">                            FieldDelegate delegate)</span> &#123;</span><br><span class="line">    <span class="comment">// Convert input date to time field list</span></span><br><span class="line">    calendar.setTime(date);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ....</span></span><br><span class="line">   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>In high concurrency, this set method will cause race condition.</p>
+<p>Reference:</p>
+<p><a target="_blank" rel="noopener" href="http://fahdshariff.blogspot.com/2010/08/dateformat-with-multiple-threads.html">DateFormat with Multiple Threads</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/csdn_ds/article/details/72984646">SimpleDateFormat线程不安全及解决办法</a></p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>Change to <code>DateTimeFormatter</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">DateTimeFormatter</span> <span class="variable">FORMATTER</span> <span class="operator">=</span> DateTimeFormatter.ofPattern(DATE_PATTERN)</span><br></pre></td></tr></table></figure>
+
+<p>Note: we need to parse Date to LocalDate in order to parse. Here is an example code.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.time.LocalDate;</span><br><span class="line"><span class="keyword">import</span> java.time.ZoneId;</span><br><span class="line"><span class="keyword">import</span> java.time.format.DateTimeFormatter;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DateToStringExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// Create a java.util.Date object (replace this with your desired date)</span></span><br><span class="line">        <span class="type">Date</span> <span class="variable">legacyDate</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Convert the java.util.Date to java.time.LocalDate</span></span><br><span class="line">        <span class="type">LocalDate</span> <span class="variable">localDate</span> <span class="operator">=</span> legacyDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Define your desired date format</span></span><br><span class="line">        <span class="type">DateTimeFormatter</span> <span class="variable">formatter</span> <span class="operator">=</span> DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy-MM-dd&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">formattedDate</span> <span class="operator">=</span> localDate.format(formatter);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;Formatted Date: &quot;</span> + formattedDate);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/22/Tips-of-Equals-Method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/shiba.jpeg">
+      <meta itemprop="name" content="Kevin Duan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Kevin's Personal Tech Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/22/Tips-of-Equals-Method/" class="post-title-link" itemprop="url">Tips of Equals Method</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-08-22 11:30:08" itemprop="dateCreated datePublished" datetime="2023-08-22T11:30:08-05:00">2023-08-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-08-29 16:19:24" itemprop="dateModified" datetime="2023-08-29T16:19:24-05:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Work-Tips/" itemprop="url" rel="index"><span itemprop="name">Work Tips</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h2><p>SonarQube indicates following code (dummy) raises a <strong>reliability</strong> issue&#x2F;bug</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">var</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"><span class="keyword">if</span> (obj.getType().equals(<span class="string">&quot;excel&quot;</span>))</span><br><span class="line">  <span class="comment">// do something</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (obj.getType().equals(<span class="string">&quot;other&quot;</span>))</span><br><span class="line">  <span class="comment">// do others</span></span><br></pre></td></tr></table></figure>
+
+<p>The triggered rule is <a target="_blank" rel="noopener" href="https://rules.sonarsource.com/java/RSPEC-2259/">S2259</a>:  Null Pointers should not be dereferenced.</p>
+<blockquote>
+<p>A reference to <code>null</code> should never be dereferenced&#x2F;accessed. Doing so will cause a <code>NullPointerException</code> to be thrown. At best, such an exception will cause abrupt program termination. At worst, it could expose debugging information that would be useful to an attacker, or it could allow an attacker to bypass security measures.</p>
+</blockquote>
+<h2 id="Reason"><a href="#Reason" class="headerlink" title="Reason"></a>Reason</h2><p>In the above code, <code>obj.getType()</code> could be <code>null</code>. So in this case, it will raise NPE.</p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>change to above code to below</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (Objects.equals(obj.getType(), <span class="string">&quot;excel&quot;</span>))</span><br><span class="line">  <span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>A quick test on jshell.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">jshell&gt; String a;</span><br><span class="line">a ==&gt; null</span><br><span class="line"></span><br><span class="line">jshell&gt; a.equals(&quot;&quot;)</span><br><span class="line">|  Exception java.lang.NullPointerException: Cannot invoke &quot;String.equals(Object)&quot; because &quot;REPL.$JShell$11.a&quot; is null</span><br><span class="line">|        at (#2:1)</span><br><span class="line"></span><br><span class="line">jshell&gt; Objects.equals(a, &quot;&quot;)</span><br><span class="line">$3 ==&gt; false</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -195,7 +547,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-07-05 11:01:20 / Modified: 13:22:58" itemprop="dateCreated datePublished" datetime="2023-07-05T11:01:20-04:00">2023-07-05</time>
+      <time title="Created: 2023-07-05 10:01:20 / Modified: 12:22:58" itemprop="dateCreated datePublished" datetime="2023-07-05T10:01:20-05:00">2023-07-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -314,7 +666,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-07-04 20:01:22 / Modified: 23:48:43" itemprop="dateCreated datePublished" datetime="2023-07-04T20:01:22-04:00">2023-07-04</time>
+      <time title="Created: 2023-07-04 19:01:22 / Modified: 22:48:43" itemprop="dateCreated datePublished" datetime="2023-07-04T19:01:22-05:00">2023-07-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -513,14 +865,14 @@ API --POST /product--&gt; Controller --createProductCommand--&gt; CommandGateway
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2023-07-04 14:04:59" itemprop="dateCreated datePublished" datetime="2023-07-04T14:04:59-04:00">2023-07-04</time>
+      <time title="Created: 2023-07-04 13:04:59" itemprop="dateCreated datePublished" datetime="2023-07-04T13:04:59-05:00">2023-07-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-07-05 11:02:01" itemprop="dateModified" datetime="2023-07-05T11:02:01-04:00">2023-07-05</time>
+      <time title="Modified: 2023-07-05 10:02:01" itemprop="dateModified" datetime="2023-07-05T10:02:01-05:00">2023-07-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -672,14 +1024,14 @@ API --POST /product--&gt; Controller --createProductCommand--&gt; CommandGateway
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2023-07-03 22:53:31" itemprop="dateCreated datePublished" datetime="2023-07-03T22:53:31-04:00">2023-07-03</time>
+      <time title="Created: 2023-07-03 21:53:31" itemprop="dateCreated datePublished" datetime="2023-07-03T21:53:31-05:00">2023-07-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-07-04 14:02:39" itemprop="dateModified" datetime="2023-07-04T14:02:39-04:00">2023-07-04</time>
+      <time title="Modified: 2023-07-04 13:02:39" itemprop="dateModified" datetime="2023-07-04T13:02:39-05:00">2023-07-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -883,7 +1235,7 @@ API --POST /product--&gt; Controller --createProductCommand--&gt; CommandGateway
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-06-30 14:19:09 / Modified: 14:33:41" itemprop="dateCreated datePublished" datetime="2023-06-30T14:19:09-04:00">2023-06-30</time>
+      <time title="Created: 2023-06-30 13:19:09 / Modified: 13:33:41" itemprop="dateCreated datePublished" datetime="2023-06-30T13:19:09-05:00">2023-06-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -974,7 +1326,7 @@ API --POST /product--&gt; Controller --createProductCommand--&gt; CommandGateway
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-06-15 18:50:54 / Modified: 19:04:50" itemprop="dateCreated datePublished" datetime="2023-06-15T18:50:54-04:00">2023-06-15</time>
+      <time title="Created: 2023-06-15 17:50:54 / Modified: 18:04:50" itemprop="dateCreated datePublished" datetime="2023-06-15T17:50:54-05:00">2023-06-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1074,7 +1426,7 @@ API --POST /product--&gt; Controller --createProductCommand--&gt; CommandGateway
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-06-15 17:37:13 / Modified: 23:22:34" itemprop="dateCreated datePublished" datetime="2023-06-15T17:37:13-04:00">2023-06-15</time>
+      <time title="Created: 2023-06-15 16:37:13 / Modified: 22:22:34" itemprop="dateCreated datePublished" datetime="2023-06-15T16:37:13-05:00">2023-06-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1140,148 +1492,9 @@ API --POST /product--&gt; Controller --createProductCommand--&gt; CommandGateway
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/15/Deploy%20Hexo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/shiba.jpeg">
-      <meta itemprop="name" content="Kevin Duan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Kevin's Personal Tech Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Kevin's Personal Tech Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/06/15/Deploy%20Hexo/" class="post-title-link" itemprop="url">Deploy Hexo</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2023-06-15 00:16:53 / Modified: 23:22:45" itemprop="dateCreated datePublished" datetime="2023-06-15T00:16:53-04:00">2023-06-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/manual/" itemprop="url" rel="index"><span itemprop="name">manual</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><h3 id="Nodejs"><a href="#Nodejs" class="headerlink" title="Nodejs"></a>Nodejs</h3><p>Download here: <a target="_blank" rel="noopener" href="https://nodejs.org/en/download">https://nodejs.org/en/download</a></p>
-<p>Or install via HomeBrew (mac)</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install node</span><br></pre></td></tr></table></figure>
-
-<p>Check if success using </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br></pre></td></tr></table></figure>
-
-<p>Note please also check npm</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm -v</span><br></pre></td></tr></table></figure>
-
-<h3 id="hexo-cli"><a href="#hexo-cli" class="headerlink" title="hexo-cli"></a>hexo-cli</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-
-<p>check if success by</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo -v</span><br></pre></td></tr></table></figure>
-
-<h3 id="Make-Dir"><a href="#Make-Dir" class="headerlink" title="Make Dir"></a>Make Dir</h3><p>create a directory for the blog</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir blog</span><br></pre></td></tr></table></figure>
-
-<p>in mac, we need to change mod to allow to use hexo without sudo</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod -R 777 blog</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>Note: The command <code>sudo chmod -R 777 blog</code> is a Linux command used to modify the permissions of a directory and its contents. Let’s break down the command and understand its components:</p>
-<ul>
-<li><p><code>sudo</code>: The <code>sudo</code> command is used to execute the subsequent command with elevated privileges. It stands for “Super User Do” and allows the user to run commands as a superuser or another user.</p>
-</li>
-<li><p><code>chmod</code>: The <code>chmod</code> command is used to change the permissions (read, write, execute) of files and directories in Linux.</p>
-</li>
-<li><p><code>-R</code>: The <code>-R</code> option stands for “recursive” and is used to apply the permissions change to the directory and all of its subdirectories and files.</p>
-</li>
-<li><p><code>777</code>: The number <code>777</code> is the permission setting for the directory and its contents. Each digit represents permissions for different user groups:</p>
-<ul>
-<li>The first digit (<code>7</code>) represents permissions for the owner of the directory.</li>
-<li>The second digit (<code>7</code>) represents permissions for the group that the directory belongs to.</li>
-<li>The third digit (<code>7</code>) represents permissions for all other users.</li>
-</ul>
-<p>In this case, <code>7</code> means full read, write, and execute permissions for each group. So, <code>777</code> grants read, write, and execute permissions to the owner, the group, and all other users.</p>
-</li>
-</ul>
-</blockquote>
-<p>reference: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Yb411a7ty/?share_source=copy_web&vd_source=2c0a2ce6fa591cfeabb7e0d400c5428d">https://www.bilibili.com/video/BV1Yb411a7ty/?share_source=copy_web&amp;vd_source=2c0a2ce6fa591cfeabb7e0d400c5428d</a></p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><p>this is for running at localhost.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br><span class="line"><span class="comment"># or simpler</span></span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-<h2 id="Theme"><a href="#Theme" class="headerlink" title="Theme"></a>Theme</h2><p>The theme is <code>nexT</code>, here is the <a target="_blank" rel="noopener" href="https://github.com/next-theme/hexo-theme-next">git repo</a>. </p>
-<p>Please following guide there or below</p>
-<p>Or you can clone the entire repository:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd blog</span><br><span class="line">$ git clone https://github.com/next-theme/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
-
-<p>See <a target="_blank" rel="noopener" href="https://theme-next.js.org/docs/getting-started/installation.html">detailed installation instructions</a> if you want any other variant.</p>
-<p>After the installation, open Hexo config file and set <code>theme</code> variable to <code>next</code>.</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
-
-<p>Bettter using clone repository since you will have better control in <code>_config.yml</code> in theme own folder</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
 
 </div>
   </main>
